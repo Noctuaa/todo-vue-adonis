@@ -72,7 +72,7 @@ export default class AuthController {
       };
 
       // Generate access token
-      const accessToken = await User.accessTokens.create(user);
+      const accessTokens = await User.accessTokens.create(user);
 
       return response.json({
          message: 'Login successful',
@@ -82,8 +82,25 @@ export default class AuthController {
                email: user.email,
                fullName: user.fullName
             },
-            accessToken: accessToken.value!.release(),
+            accessTokens: accessTokens.value!.release(),
          }
       });
+   }
+
+   /**
+    * Logout a user
+    * @param param0 - HttpContext
+    * @param param0.auth - The authentication object
+    * @param param0.response - The HTTP response object
+    */
+   async logout({ auth, response }: HttpContext) {
+      // Get current user
+      const user = auth.getUserOrFail();
+      const accessTokens = auth.user?.currentAccessToken;
+
+      // Revoke the access token
+      if (accessTokens) { await User.accessTokens.delete(user, accessTokens.identifier)}
+
+      return response.json({ message: 'Logout successful'})
    }
 }
