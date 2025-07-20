@@ -5,15 +5,15 @@ import Todo from '#models/todo'
 export default class TodosController {
 
    /**
-    * List all todos for authenticated user
-    * @param param0 - HttpContext
-    * @param param0.auth - The authentication service
-    * @param param0.response - The HTTP response object
-    * @returns 
+    * GET /todos - List all todos for authenticated user
+    * 
+    * Retrieves all todos belonging to the authenticated user
+    * 
+    * @returns {array} Array of user's todos
     */
    async index({ auth, response }: HttpContext) {
       const user = auth.getUserOrFail()
-      const todos = await Todo.query().where('userId', user.id).orderBy('createdAt', 'desc')
+      const todos = await Todo.query().where('userId', user.id)
 
       return response.json({
          message: 'Todos retrieved successfully',
@@ -22,12 +22,14 @@ export default class TodosController {
    }
    
    /**
-    * Create a new todo
-    * @param param0 - HttpContext
-    * @param param0.auth - The authentication service
-    * @param param0.request - The HTTP request object
-    * @param param0.response - The HTTP response object
-    * @returns 
+    * POST /todos - Create a new todo for authenticated user
+    * 
+    * Creates a new todo with the specified title. The todo is automatically
+    * assigned to the authenticated user and starts with completed=false.
+    * 
+    * @param {string} body.title - Todo title (required, 1-255 chars, trimmed)
+    * @returns {object} Created todo with id, title, completed, userId, timestamps
+    * 
     */
    async store({ auth, request, response }: HttpContext) {
       const user = auth.getUserOrFail()
