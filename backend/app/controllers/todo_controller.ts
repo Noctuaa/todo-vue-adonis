@@ -13,9 +13,8 @@ export default class TodosController {
     * 
     * @throws {401} User not authenticated
     */
-   async index({ auth, response }: HttpContext) {
-      const user = auth.getUserOrFail()
-      const todos = await Todo.query().where('userId', user.id)
+   async index({ auth, response }: HttpContext) { 
+      const todos = await Todo.query().where('userId', auth.user!.id)
 
       return response.json({
          message: 'Todos retrieved successfully',
@@ -36,13 +35,12 @@ export default class TodosController {
     * @throws {400} Title missing, empty, or exceeds 255 characters
     */
    async store({ auth, request, response }: HttpContext) {
-      const user = auth.getUserOrFail()
       const payload = await request.validateUsing(createTodoValidator)
       
       const todo = await Todo.create({
          title: payload.title,
          completed: false,
-         userId: user.id
+         userId: auth.user!.id
       })
       
       return response.status(201).json({
@@ -68,11 +66,9 @@ export default class TodosController {
    * @throws {400} Validation error (invalid title/completed)
    */
    async update({ auth, params, request, response }: HttpContext) {
-      const user = auth.getUserOrFail();
-
       const payload = await request.validateUsing(updateTodoValidator);
       
-      const todo = await Todo.query().where('id', params.id).where('user_id', user.id).firstOrFail();
+      const todo = await Todo.query().where('id', params.id).where('user_id', auth.user!.id).firstOrFail();
 
       todo.merge(payload);
       await todo.save();
@@ -96,9 +92,7 @@ export default class TodosController {
     * @throws {401} User not authenticated
     */ 
    async destroy({ auth, params, response }: HttpContext) {
-      const user = auth.getUserOrFail();
-
-      const todo = await Todo.query().where('id', params.id).where('user_id', user.id).firstOrFail();
+      const todo = await Todo.query().where('id', params.id).where('user_id', auth.user!.id).firstOrFail();
 
       await todo.delete();
 

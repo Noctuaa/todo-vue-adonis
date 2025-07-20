@@ -91,12 +91,10 @@ export default class AuthController {
     * @param param0.response - The HTTP response object
     */
    async logout({ auth, response }: HttpContext) {
-      // Get current user
-      const user = auth.getUserOrFail();
       const accessTokens = auth.user?.currentAccessToken;
-
+      
       // Revoke the access token
-      if (accessTokens) { await User.accessTokens.delete(user, accessTokens.identifier)}
+      if (accessTokens) { await User.accessTokens.delete(auth.user, accessTokens.identifier)}
 
       return response.json({ message: 'Logout successful'})
    }
