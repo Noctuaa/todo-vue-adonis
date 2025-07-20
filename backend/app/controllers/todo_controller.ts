@@ -10,6 +10,8 @@ export default class TodosController {
     * Retrieves all todos belonging to the authenticated user
     * 
     * @returns {array} Array of user's todos
+    * 
+    * @throws {401} User not authenticated
     */
    async index({ auth, response }: HttpContext) {
       const user = auth.getUserOrFail()
@@ -30,6 +32,8 @@ export default class TodosController {
     * @param {string} body.title - Todo title (required, 1-255 chars, trimmed)
     * @returns {object} Created todo with id, title, completed, userId, timestamps
     * 
+    * @throws {401} User not authenticated
+    * @throws {400} Title missing, empty, or exceeds 255 characters
     */
    async store({ auth, request, response }: HttpContext) {
       const user = auth.getUserOrFail()
@@ -58,6 +62,10 @@ export default class TodosController {
    * @param {boolean} [body.completed] - New completion status (optional)
    * 
    * @returns {object} Updated todo object
+   * 
+   * @throws {404} Todo not found or doesn't belong to user
+   * @throws {401} User not authenticated
+   * @throws {400} Validation error (invalid title/completed)
    */
    async update({ auth, params, request, response }: HttpContext) {
       const user = auth.getUserOrFail();
@@ -69,7 +77,7 @@ export default class TodosController {
       todo.merge(payload);
       await todo.save();
 
-      return response.status(201).json({
+      return response.json({
          message: 'Todo updated successfully',
          data: todo
       })
