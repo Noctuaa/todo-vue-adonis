@@ -44,4 +44,33 @@ export default class TodosController {
          data: todo
       })
    }
+
+   /**
+   * PUT /todos/:id - Update an existing todo
+   * 
+   * Updates a todo belonging to the authenticated user.
+   * Can update title, completed status, or both.
+   * 
+   * @param {number} params.id - Todo ID to update
+   * @param {string} [body.title] - New title (optional, 1-255 chars)
+   * @param {boolean} [body.completed] - New completion status (optional)
+   * 
+   * @returns {object} Updated todo object
+   */
+   async update({ auth, params, request, response }: HttpContext) {
+      const user = auth.getUserOrFail();
+
+      const payload = await request.validateUsing(updateTodoValidator);
+      
+      const todo = await Todo.query().where('id', params.id).where('user_id', user.id).firstOrFail();
+
+      todo.merge(payload);
+      await todo.save();
+
+      return response.status(201).json({
+         message: 'Todo updated successfully',
+         data: todo
+      })
+   }
+
 }

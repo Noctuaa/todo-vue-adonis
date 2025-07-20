@@ -29,7 +29,6 @@ router.group(() => {
 router.group(() => {
   router.get('/todos', [TodoController, 'index'])      // GET /todos
   router.post('/todos', [TodoController, 'store'])     // POST /todos  
-  //router.get('/todos/:id', [TodoController, 'show'])   // GET /todos/:id
-  //router.put('/todos/:id', [TodoController, 'update']) // PUT /todos/:id
+  router.put('/todos/:id', [TodoController, 'update']) // PUT /todos/:id
   //router.delete('/todos/:id', [TodoController, 'destroy']) // DELETE /todos/:id
 }).middleware(middleware.auth())
