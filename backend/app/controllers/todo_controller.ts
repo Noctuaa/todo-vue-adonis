@@ -75,4 +75,27 @@ export default class TodosController {
       })
    }
 
+   /**
+    * DELETE /todos/:id - Delete a specific todo
+    * 
+    * Permanently deletes a todo belonging to the authenticated user.
+    * This action cannot be undone.
+    * 
+    * @param {number} params.id - Todo ID to delete
+    * @returns {object} Success confirmation message
+    * 
+    * @throws {404} Todo not found or doesn't belong to user
+    * @throws {401} User not authenticated
+    */ 
+   async destroy({ auth, params, response }: HttpContext) {
+      const user = auth.getUserOrFail();
+
+      const todo = await Todo.query().where('id', params.id).where('user_id', user.id).firstOrFail();
+
+      await todo.delete();
+
+      return response.json({
+         message: 'Todo deleted successfully',
+      })
+   }
 }
