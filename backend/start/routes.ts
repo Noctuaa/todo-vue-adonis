@@ -31,4 +31,4 @@ router.group(() => {
   router.post('/todos', [TodoController, 'store'])     // POST /todos  
   router.put('/todos/:id', [TodoController, 'update']) // PUT /todos/:id
   router.delete('/todos/:id', [TodoController, 'destroy']) // DELETE /todos/:id
-}).middleware(middleware.auth())
+}).use([middleware.auth(), middleware.csrf()])
