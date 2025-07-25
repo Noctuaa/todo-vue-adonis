@@ -51,15 +51,11 @@ a,
 }
 
 h1{
-  font-size: 4rem;
-  margin: 64px 0;
+  font-size: 2rem;
   color: var(--text-secondary);
-  filter: blur(.06rem);
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.btn {
+  cursor: pointer;
 }
 

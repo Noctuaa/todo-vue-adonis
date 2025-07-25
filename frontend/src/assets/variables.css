@@ -21,6 +21,7 @@
 
   /* === BORDER RADIUS === */
   --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
 
   /* === ANIMATIONS === */
   --duration-fast: .3s;
