@@ -1,22 +1,42 @@
 <script setup lang="ts">
    import LoginForm from '@/components/auth/LoginForm.vue';
+   import RegisterForm from '@/components/auth/RegisterForm.vue';
+   import { computed } from 'vue';
+   import { useRoute } from 'vue-router';
+
+   const route = useRoute();
+   const isLogin = computed(() => route.path === '/login');
+
 </script>
 
 <template>
-   <div class="auth-container d-flex j-content-center a-items-center w-100">
-      <div class="auth-card w-100">
+   <div class="auth-container a-content-center w-100">
+      <div class="auth-card p-relative w-100" :style="{ height: isLogin ? '424px' : '550px' }">
          <div class="auth-header">
-            <h1 class="auth-title">Login</h1>
-            <p class="auth-subtitle">Connectez-vous à votre compte</p>
+            <h1 class="auth-title">{{ isLogin ? 'Connexion' : 'Inscription'  }}</h1>
+            <p class="auth-subtitle">{{ isLogin ? 'Connectez-vous à votre compte' : 'Créez votre compte'}}</p>
          </div>
          <div class="auth-content">
-            <LoginForm />
-         </div>
-         <div class="auth-footer">
-            <p class="text-center">
-               Pas encore de compte ? 
-               <router-link to="/register" class="auth-link">Inscrivez-vous</router-link>
-            </p>
+            <Transition name="slide-fade" mode="out-in">
+               <div v-if="isLogin" key="login">
+                  <LoginForm/>
+                  <div class="auth-footer">
+                     <p class="text-center">
+                        Pas encore de compte ?
+                        <router-link to="/register" class="auth-link">Inscrivez-vous</router-link>
+                     </p>
+                  </div>
+               </div>
+               <div v-else key="register">
+                  <RegisterForm/>
+                  <div class="auth-footer">
+                     <p class="text-center">
+                        Déjà inscrit ?
+                        <router-link to="/login" class="auth-link">Se connecter</router-link>
+                     </p>
+                  </div>
+               </div>
+            </Transition>
          </div>
       </div>
    </div>
@@ -34,6 +54,7 @@
       border-radius: 20px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.15);
       overflow: hidden;
+      transition: all var(--duration-fast) ease;
    }
    
    .auth-header {
@@ -59,7 +80,7 @@
    }
    
    .auth-footer{
-      padding: 0 var(--spacing-8) var(--spacing-8);
+      padding:var(--spacing-8);
    }
 
    .auth-footer p {
@@ -69,10 +90,23 @@
    }
 
    .auth-link {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
       margin-left: 5px;
+   }
+
+   /*=== ANIMATION ===*/
+   .slide-fade-enter-active,
+   .slide-fade-leave-active {
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+
+   .slide-fade-enter-from {
+      opacity: 0;
+      transform: translateY(20px);
+   }
+
+   .slide-fade-leave-to {
+      opacity: 0;
+      transform: translateY(-20px);
    }
 
 </style>

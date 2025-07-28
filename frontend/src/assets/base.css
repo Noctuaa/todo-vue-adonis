@@ -42,12 +42,11 @@ body {
   padding: 1rem;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+a {
+  	text-decoration: none;
+	color: var(--text-link);
+	text-decoration: none;
+	font-weight: 600;
 }
 
 h1{
@@ -59,3 +58,52 @@ h1{
   cursor: pointer;
 }
 
+/* === FORM STYLES === */
+.form-group {
+	margin-bottom: var(--spacing-5);
+}
+
+.form-input {
+	width: 100%;
+	padding: var(--spacing-3) var(--spacing-4);
+	border: 2px solid var(--border-color);
+	border-radius: var(--radius-lg);
+	background: var(--bg-input);
+	transition: all var(--duration-fast) ease;
+}
+
+.form-input::placeholder{
+	font-size: .95rem;
+	font-weight: 500;
+}
+
+.form-input:focus {
+	outline:none;
+	border-color: var(--primary);
+}
+
+.form-button {
+	padding: var(--spacing-3);
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: var(--text-secondary);
+	border: none;
+	border-radius: var(--radius-lg);
+	position: relative;
+	transition: all var(--duration-fast) ease;
+}
+
+.form-button:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(102, 126, 234, .3);
+}
+
+.form-button:disabled {
+	opacity: .7;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.form-button span {
+	font-size: 1rem;
+	font-weight: 600;
+}
