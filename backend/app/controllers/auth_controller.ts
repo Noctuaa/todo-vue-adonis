@@ -54,7 +54,7 @@ export default class AuthController {
       const user = await User.findBy('email', payload.email);
       if (!user) {
          return response.status(400).json({
-            message: 'Invalid email or password',
+            message: 'Email ou mot de passe incorrect',
             error: 'User not found'
          });
       };
@@ -63,7 +63,7 @@ export default class AuthController {
       const isPasswordValid = await hash.verify(user.password, payload.password);
       if (!isPasswordValid) {
          return response.status(400).json({
-            message: 'Invalid email or password',
+            message: 'Email ou mot de passe incorrect',
             error: 'Incorrect password'
          });
       };
