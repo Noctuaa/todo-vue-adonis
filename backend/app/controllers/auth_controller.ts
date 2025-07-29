@@ -54,7 +54,7 @@ export default class AuthController {
       const user = await User.findBy('email', payload.email);
       if (!user) {
          return response.status(400).json({
-            message: 'Email ou mot de passe incorrect',
+            message: 'Invalid email or password',
             error: 'User not found'
          });
       };
@@ -63,7 +63,7 @@ export default class AuthController {
       const isPasswordValid = await hash.verify(user.password, payload.password);
       if (!isPasswordValid) {
          return response.status(400).json({
-            message: 'Email ou mot de passe incorrect',
+            message: 'Invalid email or password',
             error: 'Incorrect password'
          });
       };
@@ -94,8 +94,8 @@ export default class AuthController {
       const accessTokens = auth.user?.currentAccessToken;
       
       // Revoke the access token
-      if (accessTokens) { await User.accessTokens.delete(auth.user, accessToken.identifier)}
+      if (accessTokens) { await User.accessTokens.delete(auth.user, accessTokens.identifier)}
 
-      return response.json({  message: 'Déconnexion réussie'});
+      return response.json({  message: 'Logout successful' });
    }
 }
