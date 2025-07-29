@@ -79,7 +79,7 @@ export default class AuthController {
                email: user.email,
                fullName: user.fullName
             },
-            accessTokens: accessTokens.value!.release(),
+            token: accessTokens.value!.release()
          }
       });
    }
@@ -94,8 +94,8 @@ export default class AuthController {
       const accessTokens = auth.user?.currentAccessToken;
       
       // Revoke the access token
-      if (accessTokens) { await User.accessTokens.delete(auth.user, accessTokens.identifier)}
+      if (accessTokens) { await User.accessTokens.delete(auth.user, accessToken.identifier)}
 
-      return response.json({ message: 'Logout successful'})
+      return response.json({  message: 'Déconnexion réussie'});
    }
 }
